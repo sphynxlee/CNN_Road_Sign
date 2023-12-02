@@ -20,8 +20,8 @@ def resize_images_in_folder(input_folder, output_folder, target_size):
             img_resized = img.resize(target_size, Image.ANTIALIAS) # type: ignore
             img_resized.save(output_path)
 
-input_folder = os.getcwd() + '/NSCCAI/CNN_road_sign/road_signs_img'
-output_folder = os.getcwd() + '/NSCCAI/CNN_road_sign/resized_images'
+input_folder = os.getcwd() + '/CNN_road_sign/road_signs_img'
+output_folder = os.getcwd() + '/CNN_road_sign/resized_images'
 # Resize Images to a Consistent Size: 224 x 224
 target_size = (224, 224)
 

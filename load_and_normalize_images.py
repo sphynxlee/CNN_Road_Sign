@@ -36,7 +36,7 @@ def preprocess_and_save_dataset(input_folder, output_file):
     with open(output_file, 'wb') as file:
         pickle.dump(dataset, file)
 
-input_folder = os.getcwd() + '/NSCCAI/CNN_road_sign/resized_images'
-output_file = os.getcwd() + '/NSCCAI/CNN_road_sign/road_signs_dataset.pkl'
+input_folder = os.getcwd() + '/CNN_road_sign/resized_images'
+output_file = os.getcwd() + '/CNN_road_sign/road_signs_dataset.pkl'
 
 preprocess_and_save_dataset(input_folder, output_file)
