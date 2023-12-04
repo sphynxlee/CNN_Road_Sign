@@ -28,3 +28,4 @@ def Road_Sign_Predict(input_image_path):
         prediction = model.predict(input_image)
 
     print("Predicted Class:", prediction.item())
+    return prediction.item()
