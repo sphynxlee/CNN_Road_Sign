@@ -17,7 +17,7 @@ def preprocess_and_save_dataset(input_folder, output_file):
             image_path = os.path.join(class_path, image_name)
 
             # Load and resize image
-            img = Image.open(image_path)
+            img = Image.open(image_path).convert("L")  # Convert to grayscale
 
             # Convert image to NumPy array and normalize pixel values to [0, 1]
             img_array = np.array(img, dtype=np.float32) / 255.0
