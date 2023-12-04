@@ -13,14 +13,14 @@ BATCH_SIZE = 32
 pwd = os.getcwd()
 
 # Load the dataset directly from the pickle file
-dataset_file_path = pwd + "/CNN_road_sign/road_signs_dataset.pkl"
+train_dataset_file_path = pwd + "/CNN_road_sign/road_signs_dataset.pkl"
 
 # Verify that the dataset file exists
-if not os.path.exists(dataset_file_path):
-    raise FileNotFoundError(f"Dataset file not found: {dataset_file_path}")
+if not os.path.exists(train_dataset_file_path):
+    raise FileNotFoundError(f"Dataset file not found: {train_dataset_file_path}")
 
 # Load the dataset directly from the pickle file
-with open(dataset_file_path, 'rb') as file:
+with open(train_dataset_file_path, 'rb') as file:
     dataset = pickle.load(file)
 
 # Verify that the dataset contains images and labels
@@ -84,6 +84,24 @@ class RoadSignCNN(nn.Module):
             pred = self.forward(input)
             return torch.argmax(pred, axis=-1)
 
+    def evaluate(self, dataloader):
+        self.eval()  # Set the model to evaluation mode
+        correct_predictions = 0
+        total_samples = 0
+
+        with torch.no_grad():
+            for inputs, labels in tqdm(dataloader):
+                inputs = inputs.to(DEVICE)
+                labels = labels.to(DEVICE)
+
+                predictions = self.predict(inputs)
+                correct_predictions += torch.sum(predictions == labels).item()
+                total_samples += labels.size(0)
+
+        accuracy = correct_predictions / total_samples
+        print("Accuracy: {:.2%}".format(accuracy))
+        return accuracy
+
     def save_model(self, model_path):
         torch.save(self.state_dict(), model_path)
         print(f"Model saved to {model_path}")
@@ -95,6 +113,7 @@ class RoadSignCNN(nn.Module):
         if 'layers.9.weight' in checkpoint and checkpoint['layers.9.weight'].shape[0] != self.layers[9].weight.shape[0]:
             # Modify the model architecture to match the checkpoint
             # Add or remove layers as needed
+            num_classes = checkpoint['layers.9.weight'].shape[0]
             self.layers[9] = nn.Linear(checkpoint['layers.9.weight'].shape[1], num_classes)
 
         self.load_state_dict(checkpoint)
@@ -124,3 +143,7 @@ else:
 
     # Save the trained model
     model.save_model(model_saved_path)
+
+    # Evaluate the model
+    test_loader = DataLoader(torch_dataset, batch_size=BATCH_SIZE, shuffle=False)
+    model.evaluate(test_loader)
