@@ -13,7 +13,7 @@ model = RoadSignCNN(num_classes=4)
 model_path = pwd + "/CNN_road_sign/road_sign_model.pth"
 model.load_model(model_path)
 
-# Prepare your input data
+# Prepare input data
 # For example, load an image using PIL and convert it to the required format
 # input_image_path = pwd + "/CNN_road_sign/test_images/stop01.png"
 
