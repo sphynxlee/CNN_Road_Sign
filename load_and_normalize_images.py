@@ -7,6 +7,25 @@ import pickle
 import numpy as np
 from PIL import Image
 
+def resize_images_in_folder(input_folder, output_folder, target_size):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    for class_folder in os.listdir(input_folder):
+        class_path = os.path.join(input_folder, class_folder)
+        output_class_path = os.path.join(output_folder, class_folder)
+
+        if not os.path.exists(output_class_path):
+            os.makedirs(output_class_path)
+
+        for image_name in os.listdir(class_path):
+            image_path = os.path.join(class_path, image_name)
+            output_path = os.path.join(output_class_path, "resized_" + image_name)
+
+            img = Image.open(image_path)
+            img_resized = img.resize(target_size, Image.ANTIALIAS) # type: ignore
+            img_resized.save(output_path)
+
 def preprocess_and_save_dataset(input_folder, output_file):
     dataset = []
 
@@ -36,7 +55,14 @@ def preprocess_and_save_dataset(input_folder, output_file):
     with open(output_file, 'wb') as file:
         pickle.dump(dataset, file)
 
-input_folder = os.getcwd() + '/CNN_road_sign/resized_images'
+# Paths
+input_folder_resize = os.getcwd() + '/CNN_road_sign/road_signs_img'
+output_folder_resize = os.getcwd() + '/CNN_road_sign/resized_images'
 output_file = os.getcwd() + '/CNN_road_sign/road_signs_dataset.pkl'
+target_size = (224, 224)
 
-preprocess_and_save_dataset(input_folder, output_file)
+# Resize Images
+resize_images_in_folder(input_folder_resize, output_folder_resize, target_size)
+
+# Preprocess and Save Dataset
+preprocess_and_save_dataset(output_folder_resize, output_file)

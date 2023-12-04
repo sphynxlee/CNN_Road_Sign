@@ -6,7 +6,7 @@ from road_sign_CNN import RoadSignCNN  # Assuming your model class is defined in
 
 pwd = os.getcwd()
 
-# Instantiate the model
+# Instantiate the model using the RoadSignCNN class
 model = RoadSignCNN(num_classes=4)
 
 # Load the trained model

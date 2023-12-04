@@ -89,11 +89,18 @@ class RoadSignCNN(nn.Module):
         print(f"Model saved to {model_path}")
 
     def load_model(self, model_path):
-        self.load_state_dict(torch.load(model_path))
+        checkpoint = torch.load(model_path)
+
+        # Adjust the model architecture if needed
+        if 'layers.9.weight' in checkpoint and checkpoint['layers.9.weight'].shape[0] != self.layers[9].weight.shape[0]:
+            # Modify the model architecture to match the checkpoint
+            # Add or remove layers as needed
+            self.layers[9] = nn.Linear(checkpoint['layers.9.weight'].shape[1], num_classes)
+
+        self.load_state_dict(checkpoint)
         print(f"Model loaded from {model_path}")
 
 # Instantiate the model using the number of classes from the training set
-# model = RoadSignCNN(num_classes=len(torch.unique(labels)))
 model = RoadSignCNN(num_classes=len(torch.unique(labels)))
 model.to(DEVICE)
 
