@@ -1,5 +1,6 @@
 import os
 import random
+from road_sign_predict import Road_Sign_Predict
 
 folder_path = "test_images"
 
@@ -15,5 +16,9 @@ def random_image():
         print("chosen file:", random_file_path)
     else:
         print("No PNG files")
+        
+    return random_file_path
 
-random_image()
+random_image_path = random_image()
+print(random_image_path)
+prediction = Road_Sign_Predict(random_image_path)

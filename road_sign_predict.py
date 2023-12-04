@@ -15,13 +15,16 @@ model.load_model(model_path)
 
 # Prepare your input data
 # For example, load an image using PIL and convert it to the required format
-input_image_path = pwd + "/CNN_road_sign/test_images/stop01.png"
-input_image = Image.open(input_image_path).convert("L")  # Convert to grayscale
-input_image = transforms.ToTensor()(input_image).unsqueeze(0)  # Convert to tensor and add batch dimension
+# input_image_path = pwd + "/CNN_road_sign/test_images/stop01.png"
 
-# Perform prediction
-with torch.no_grad():
-    model.eval()  # Set the model to evaluation mode
-    prediction = model.predict(input_image)
+# Modified -> function to call with an image path
+def Road_Sign_Predict(input_image_path):
+    input_image = Image.open(input_image_path).convert("L")  # Convert to grayscale
+    input_image = transforms.ToTensor()(input_image).unsqueeze(0)  # Convert to tensor and add batch dimension
 
-print("Predicted Class:", prediction.item())
+    # Perform prediction
+    with torch.no_grad():
+        model.eval()  # Set the model to evaluation mode
+        prediction = model.predict(input_image)
+
+    print("Predicted Class:", prediction.item())
