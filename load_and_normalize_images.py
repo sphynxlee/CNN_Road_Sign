@@ -23,7 +23,8 @@ def resize_images_in_folder(input_folder, output_folder, target_size):
             output_path = os.path.join(output_class_path, "resized_" + image_name)
 
             img = Image.open(image_path)
-            img_resized = img.resize(target_size, Image.ANTIALIAS) # type: ignore
+            img_resized = img.resize(target_size, Image.Resampling.LANCZOS)
+
             img_resized.save(output_path)
 
 def preprocess_and_save_dataset(input_folder, output_file):
