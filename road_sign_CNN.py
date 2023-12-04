@@ -6,6 +6,7 @@ from torchvision import transforms
 import os
 import pickle
 import numpy as np
+from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -36,11 +37,18 @@ if images.size(1) > 1:
     # Convert RGB to grayscale
     images = images.mean(dim=1, keepdim=True)
 
-# Create a PyTorch dataset
-torch_dataset = TensorDataset(images, labels)
+# Split the dataset into train and eval sets
+train_images, eval_images, train_labels, eval_labels = train_test_split(
+    images, labels, test_size=0.1, random_state=42
+)
 
-# Create a data loader
-train_loader = DataLoader(torch_dataset, batch_size=BATCH_SIZE, shuffle=True)
+# Create PyTorch datasets for train and eval sets
+train_dataset = TensorDataset(train_images, train_labels)
+eval_dataset = TensorDataset(eval_images, eval_labels)
+
+# Create data loaders for train and eval sets
+train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+eval_loader = DataLoader(eval_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
 class RoadSignCNN(nn.Module):
     def __init__(self, num_classes):
@@ -70,8 +78,6 @@ class RoadSignCNN(nn.Module):
         pred = self.forward(inputs)
 
         # Ensure the adjusted labels are within the correct range [0, C-1]
-        # num_classes = self.layers[-1].out_features
-        # adjusted_labels = torch.clamp(labels, 0, num_classes - 1)
         adjusted_labels = torch.clamp(labels, 0, 3)
 
         loss = self.loss(pred, adjusted_labels)
@@ -82,7 +88,7 @@ class RoadSignCNN(nn.Module):
     def predict(self, input):
         with torch.no_grad():
             pred = self.forward(input)
-            return torch.argmax(pred, axis=-1)
+            return torch.argmax(pred, dim=-1)
 
     def evaluate(self, dataloader):
         self.eval()  # Set the model to evaluation mode
@@ -144,6 +150,5 @@ else:
     # Save the trained model
     model.save_model(model_saved_path)
 
-    # Evaluate the model
-    test_loader = DataLoader(torch_dataset, batch_size=BATCH_SIZE, shuffle=False)
-    model.evaluate(test_loader)
+    # Evaluate the model on the evaluation set
+    model.evaluate(eval_loader)
