@@ -3,7 +3,7 @@ import random
 
 folder_path = "test_images"
 
-# List all files and find png files
+# List all files and find png files 
 file_list = os.listdir(folder_path)
 png_files = [file for file in file_list if file.lower().endswith(".png")]
 
