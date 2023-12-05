@@ -22,10 +22,14 @@ def resize_images_in_folder(input_folder, output_folder, target_size):
             image_path = os.path.join(class_path, image_name)
             output_path = os.path.join(output_class_path, "resized_" + image_name)
 
-            img = Image.open(image_path)
-            img_resized = img.resize(target_size, Image.Resampling.LANCZOS)
+            try:
+                img = Image.open(image_path)
+                img_resized = img.resize(target_size, Image.Resampling.LANCZOS)
+                img_resized.save(output_path)
+            except Exception as e:
+                # Log information about the problematic image
+                print(f"Error processing image '{image_name}' in folder '{class_folder}': {e}")
 
-            img_resized.save(output_path)
 
 def preprocess_and_save_dataset(input_folder, output_file):
     dataset = []
