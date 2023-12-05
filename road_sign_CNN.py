@@ -78,7 +78,7 @@ class RoadSignCNN(nn.Module):
         pred = self.forward(inputs)
 
         # Ensure the adjusted labels are within the correct range [0, C-1]
-        adjusted_labels = torch.clamp(labels, 0, 3)
+        adjusted_labels = torch.clamp(labels, 0, num_classes - 1)
 
         loss = self.loss(pred, adjusted_labels)
         loss.backward()
@@ -126,7 +126,8 @@ class RoadSignCNN(nn.Module):
         print(f"Model loaded from {model_path}")
 
 # Instantiate the model using the number of classes from the training set
-model = RoadSignCNN(num_classes=len(torch.unique(labels)))
+num_classes = len(torch.unique(labels)) - 1  # Subtract 1 to match the correct number of classes
+model = RoadSignCNN(num_classes=num_classes)
 model.to(DEVICE)
 
 # Check if the model has already been trained
