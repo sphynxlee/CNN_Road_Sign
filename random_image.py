@@ -17,8 +17,6 @@ def random_image():
     else:
         print("No PNG files")
         
-    return random_file_path
-
-random_image_path = random_image()
-print(random_image_path)
-prediction = Road_Sign_Predict(random_image_path)
+    prediction = Road_Sign_Predict(random_file_path)
+    print("predicted sign is: ", prediction)
+    return prediction
