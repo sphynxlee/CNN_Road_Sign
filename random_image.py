@@ -9,14 +9,16 @@ pwd = os.getcwd()
 
 # Adjust the number of classes accordingly
 model = RoadSignCNN(num_classes=4)
+# model.to('cuda')
 
 # Load the trained model
-# model_path = pwd + "/CNN_road_sign/road_sign_model.pth"
-model_path = pwd + "/road_sign_model.pth"
-model.load_model(model_path)
+model_path = pwd + "/CNN_road_sign/road_sign_model.pth"
+# model_path = pwd + "/road_sign_model.pth"
+# model.load_model(model_path)
+# model.to("cuda")
 
-# folder_path = pwd + "/CNN_road_sign/road_signs_img/"
-folder_path = pwd + "/road_signs_img/"
+folder_path = pwd + "/CNN_road_sign/road_signs_img/"
+# folder_path = pwd + "/road_signs_img/"
 
 # Prepare input data
 # For example, load an image using PIL and convert it to the required format
@@ -79,3 +81,5 @@ def predict_image(image_path):
     prediction = Road_Sign_Predict(image_path)
     print("predicted sign is: ", prediction)
     return prediction
+
+random_image()

@@ -29,40 +29,40 @@ pygame.display.update()
 pygame.display.set_caption("CNN Car Game")
 clock = pygame.time.Clock()
 
-# # Load assets
-# # this will load from current working directory
-# car_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\Audi_Skinny_2.png")
-# # background_image = NULL
-# intro_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\intro_background.jpg")
-# paused_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\pause_icon.png")
-# gameplay_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\background_image.jpg")
-# road_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\road_image.jpg")
-# stop_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\stop_sign.jpg")
-# crosswalk_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\crosswalk_sign.png")
-# speedlimit80_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\speedlimit_sign.png")
-# trafficlight_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\traffic_light_sign.png")
-# crossing_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\crossing_image.png")
-
-# trafficlight_green_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_green.png")
-# trafficlight_yellow_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_yellow.png")
-# trafficlight_red_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_red.png")
 # Load assets
 # this will load from current working directory
-car_image = pygame.image.load(fr"{pwd}\assets\Audi_Skinny_2.png")
+car_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\Audi_Skinny_2.png")
 # background_image = NULL
-intro_background_image = pygame.image.load(fr"{pwd}\assets\intro_background.jpg")
-paused_background_image = pygame.image.load(fr"{pwd}\assets\pause_icon.png")
-gameplay_background_image = pygame.image.load(fr"{pwd}\assets\background_image.jpg")
-road_image = pygame.image.load(fr"{pwd}\assets\road_image.jpg")
-stop_sign_image = pygame.image.load(fr"{pwd}\assets\stop_sign.jpg")
-crosswalk_image = pygame.image.load(fr"{pwd}\assets\crosswalk_sign.png")
-speedlimit80_sign_image = pygame.image.load(fr"{pwd}\assets\speedlimit_sign.png")
-trafficlight_sign_image = pygame.image.load(fr"{pwd}\assets\traffic_light_sign.png")
-crossing_image = pygame.image.load(fr"{pwd}\assets\crossing_image.png")
+intro_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\intro_background.jpg")
+paused_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\pause_icon.png")
+gameplay_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\background_image.jpg")
+road_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\road_image.jpg")
+stop_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\stop_sign.jpg")
+crosswalk_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\crosswalk_sign.png")
+speedlimit80_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\speedlimit_sign.png")
+trafficlight_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\traffic_light_sign.png")
+crossing_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\crossing_image.png")
 
-trafficlight_green_image = pygame.image.load(fr"{pwd}\assets\trafficlight_green.png")
-trafficlight_yellow_image = pygame.image.load(fr"{pwd}\assets\trafficlight_yellow.png")
-trafficlight_red_image = pygame.image.load(fr"{pwd}\assets\trafficlight_red.png")
+trafficlight_green_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_green.png")
+trafficlight_yellow_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_yellow.png")
+trafficlight_red_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_red.png")
+# Load assets
+# this will load from current working directory
+# car_image = pygame.image.load(fr"{pwd}\assets\Audi_Skinny_2.png")
+# # background_image = NULL
+# intro_background_image = pygame.image.load(fr"{pwd}\assets\intro_background.jpg")
+# paused_background_image = pygame.image.load(fr"{pwd}\assets\pause_icon.png")
+# gameplay_background_image = pygame.image.load(fr"{pwd}\assets\background_image.jpg")
+# road_image = pygame.image.load(fr"{pwd}\assets\road_image.jpg")
+# stop_sign_image = pygame.image.load(fr"{pwd}\assets\stop_sign.jpg")
+# crosswalk_image = pygame.image.load(fr"{pwd}\assets\crosswalk_sign.png")
+# speedlimit80_sign_image = pygame.image.load(fr"{pwd}\assets\speedlimit_sign.png")
+# trafficlight_sign_image = pygame.image.load(fr"{pwd}\assets\traffic_light_sign.png")
+# crossing_image = pygame.image.load(fr"{pwd}\assets\crossing_image.png")
+
+# trafficlight_green_image = pygame.image.load(fr"{pwd}\assets\trafficlight_green.png")
+# trafficlight_yellow_image = pygame.image.load(fr"{pwd}\assets\trafficlight_yellow.png")
+# trafficlight_red_image = pygame.image.load(fr"{pwd}\assets\trafficlight_red.png")
 
 
 # Initialize pause state
@@ -196,8 +196,8 @@ def car(x, y):
 
 def select_random_file():
     pwd = os.getcwd()
-    # sign_folder_list = os.listdir(fr"{pwd}\CNN_Road_Sign\road_signs_img")
-    sign_folder_list = os.listdir(fr"{pwd}\road_signs_img")
+    sign_folder_list = os.listdir(fr"{pwd}\CNN_Road_Sign\road_signs_img")
+    # sign_folder_list = os.listdir(fr"{pwd}\road_signs_img")
 
     image_paths = []
     folder_choice = random.choice(['0 TrafficLight', '1 Stop', '2 speedlimit', '3 Crosswalk'])
@@ -206,14 +206,14 @@ def select_random_file():
             # print(fr"{pwd}\road_signs_img\{folder}")
             print(folder)
 
-            # choice = random.choice(os.listdir(fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder}"))
-            choice = random.choice(os.listdir(fr"{pwd}\road_signs_img\{folder}"))
+            choice = random.choice(os.listdir(fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder}"))
+            # choice = random.choice(os.listdir(fr"{pwd}\road_signs_img\{folder}"))
             print(choice)
             # image_paths.append()
     print(choice)
     print(fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder_choice}\{choice}")
-    # return fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder}\{choice}"
-    return (fr"{pwd}\road_signs_img\{folder_choice}\{choice}", folder_choice)
+    return (fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder_choice}\{choice}", folder_choice)
+    # return (fr"{pwd}\road_signs_img\{folder_choice}\{choice}", folder_choice)
 
     # return random.choice([image_paths])
 

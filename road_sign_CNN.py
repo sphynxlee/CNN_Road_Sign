@@ -10,14 +10,14 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
-# DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-DEVICE = torch.device('cpu')
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# DEVICE = torch.device('cpu')
 BATCH_SIZE = 32
 pwd = os.getcwd()
 
 # Load the dataset directly from the pickle file
-# train_dataset_file_path = pwd + "/CNN_road_sign/road_signs_dataset.pkl"
-train_dataset_file_path = pwd + "/road_signs_dataset.pkl"
+train_dataset_file_path = pwd + "/CNN_road_sign/road_signs_dataset.pkl"
+# train_dataset_file_path = pwd + "/road_signs_dataset.pkl"
 
 # Verify that the dataset file exists
 if not os.path.exists(train_dataset_file_path):
@@ -151,7 +151,7 @@ class RoadSignCNN(nn.Module):
     def set_num_classes(self, num_classes):
         # Dynamically adjust the fully connected layers based on the output size of conv_layers
         dummy_input = torch.rand(1, 1, 224, 224)
-        conv_output_size = self._get_conv_output_size(dummy_input)
+        conv_output_size = self._get_conv_output_size(dummy_input.to(DEVICE))
 
         self.fc_layers[0] = nn.Linear(conv_output_size, 256)
         self.fc_layers[-1] = nn.Linear(256, num_classes)
@@ -177,6 +177,7 @@ class RoadSignCNN(nn.Module):
 
         # Load the model state dict
         self.load_state_dict(checkpoint['model_state_dict'])
+        self.to(DEVICE)
         print(f"Model loaded from {model_path}")
 
 # Instantiate the model using the number of classes from the training set
@@ -186,14 +187,17 @@ model = RoadSignCNN(num_classes=num_classes)
 model.to(DEVICE)
 
 # Check if the model has already been trained
-# model_saved_path = pwd + "/CNN_road_sign/road_sign_model.pth"
-model_saved_path = pwd + "/road_sign_model.pth"
+model_saved_path = pwd + "/CNN_road_sign/road_sign_model.pth"
+# model_saved_path = pwd + "/road_sign_model.pth"
 if os.path.exists(model_saved_path):
     # Load the trained model if it exists
+    print("I AM HERE")
     model.load_model(model_saved_path)
+    model.to(DEVICE)
 else:
     # Train the model if it has not been trained yet
     EPOCHS = 100
+    print("DEVICE IS",DEVICE)
     for epoch in range(EPOCHS):
         total_loss = 0
         for inputs, labels in tqdm(train_loader):
