@@ -2,7 +2,7 @@ import pygame
 import time
 import random
 import os
-# from random_image import random_image
+from random_image import predict_image
 
 # Initialize pygame
 pygame.init()
@@ -132,7 +132,7 @@ def show_sign(x_sign_start, y_sign_start, sign_type):
         sign_picture = trafficlight_sign_image
     if sign_type == 'speedlimit80':
         sign_picture = speedlimit80_sign_image
-    
+
     gamedisplay.blit(sign_picture, (x_sign_start, y_sign_start))
 
 def score_system(passed, score):
@@ -158,7 +158,7 @@ def loop():
 def background():
     gamedisplay.blit(gameplay_background_image (0, 0))
 
-    gamedisplay.blit(road_image, (275,0)) 
+    gamedisplay.blit(road_image, (275,0))
 
 def car(x, y):
     gamedisplay.blit(car_image, (x, y))
@@ -206,7 +206,7 @@ def main_menu():
         # Render and display Start and Quit buttons
         button("Start", 150, 520, 100, 50, green, bright_green, "play")
         button("Quit", 550, 520, 100, 50, red, bright_red, "quit")
-        
+
 
         pygame.display.update()
         clock.tick(50)
@@ -219,7 +219,7 @@ def set_scene():
 
     gamedisplay.blit(gameplay_background_image, (0,0))
 
-    gamedisplay.blit(road_image, (275,0)) 
+    gamedisplay.blit(road_image, (275,0))
 
     gamedisplay.blit(car_image, (x, y))
 
@@ -237,7 +237,7 @@ def countdown():
                 pygame.quit()
                 quit()
                 sys.exit()
-        
+
         # fill display
         gamedisplay.fill(gray)
         #prep game
@@ -245,7 +245,7 @@ def countdown():
 
         largetext = pygame.font.Font('freesansbold.ttf', 115)
 
- 
+
         # Display "GO!" in large font at the center of the screen
         TextSurf, TextRect = text_objects("GO!", largetext)
         TextRect.center = ((display_width/2), (display_height/2))
@@ -271,7 +271,7 @@ def game_loop():
     # obs_starty = 400
 
     gameover = False
-    while not gameover:   
+    while not gameover:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -287,7 +287,7 @@ def game_loop():
         # Update game display
         gamedisplay.blit(gameplay_background_image, (0,0))
 
-        gamedisplay.blit(road_image, (275,0)) 
+        gamedisplay.blit(road_image, (275,0))
 
 
         show_sign(x_sign_start, y_sign_start, sign)
@@ -301,7 +301,7 @@ def game_loop():
                 y_change = 0
                 time.sleep(1)
                 y_change = -4
-        
+
         elif sign == "speedlimit80":
             y_change = -8
             y += y_change
@@ -331,7 +331,7 @@ def game_loop():
                 y += -1
                 gamedisplay.blit(trafficlight_green_image, (250, 400))
                 time.sleep(0.3)
-            
+
             if y < 478:
                 gamedisplay.blit(trafficlight_green_image, (250, 400))
                 y_change = -4
@@ -339,7 +339,7 @@ def game_loop():
             x += x_change
             y += -2
             car(x, y)
-          
+
         if y < 0:
             game_loop()
 
@@ -348,7 +348,7 @@ def game_loop():
         clock.tick(60)
 
 
-print(select_random_file())
+predict_image(select_random_file())
 # main_menu()
 # game_loop()
 # pygame.quit()
