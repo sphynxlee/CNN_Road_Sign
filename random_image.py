@@ -71,5 +71,9 @@ def random_image():
     print("Unable to make a prediction because no PNG files were found.")
     return None
 
-
-random_image()
+# receive an image path and return the prediction
+def predict_image(image_path):
+    # Perform prediction
+    prediction = Road_Sign_Predict(image_path)
+    print("predicted sign is: ", prediction)
+    return prediction
