@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 from torchvision import transforms
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 import os
 import pickle
 import numpy as np
@@ -42,9 +43,14 @@ train_images, eval_images, train_labels, eval_labels = train_test_split(
     images, labels, test_size=0.1, random_state=42
 )
 
+my_transform = transforms.Compose([
+    transforms.RandomRotation(10),
+    transforms.RandomHorizontalFlip(),
+])
+
 # Create PyTorch datasets for train and eval sets
-train_dataset = TensorDataset(train_images, train_labels)
-eval_dataset = TensorDataset(eval_images, eval_labels)
+train_dataset = TensorDataset(my_transform(train_images), train_labels)
+eval_dataset = TensorDataset(my_transform(eval_images), eval_labels)
 
 # Create data loaders for train and eval sets
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
@@ -53,32 +59,55 @@ eval_loader = DataLoader(eval_dataset, batch_size=BATCH_SIZE, shuffle=False)
 class RoadSignCNN(nn.Module):
     def __init__(self, num_classes):
         super(RoadSignCNN, self).__init__()
-        self.layers = nn.Sequential(
-            nn.Conv2d(1, 32, kernel_size=5, stride=1, padding=2),
+        self.conv_layers = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=0),
 
-            nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=2),
+            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=0),
+        )
 
-            nn.Flatten(),
-            nn.Linear(64 * (224 // 4) * (224 // 4), 256),
+        # Dummy input to calculate the output size of the convolutional layers
+        dummy_input = torch.rand(1, 1, 224, 224)
+        conv_output_size = self._get_conv_output_size(dummy_input)
+
+        self.fc_layers = nn.Sequential(
+            nn.Linear(conv_output_size, 256),
+            nn.ReLU(),
+            nn.Dropout(0.5),
+
             nn.Linear(256, 256),
+            nn.ReLU(),
+            nn.Dropout(0.5),
+
             nn.Linear(256, num_classes)
         )
+
+        self.num_classes = num_classes  # Added attribute to store the number of classes
         self.loss = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(self.parameters(), lr=0.001)
+        self.scheduler = ReduceLROnPlateau(self.optimizer, mode='max', patience=5, verbose=True)
 
-    def forward(self, inputs):
-        return self.layers(inputs)
+    def _get_conv_output_size(self, x):
+        x = self.conv_layers(x)
+        return x.view(x.size(0), -1).shape[1]
+
+    def forward(self, x):
+        x = self.conv_layers(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc_layers(x)
+        return x
 
     def train_step(self, inputs, labels):
         self.optimizer.zero_grad()
         pred = self.forward(inputs)
 
         # Ensure the adjusted labels are within the correct range [0, C-1]
-        adjusted_labels = torch.clamp(labels, 0, num_classes - 1)
+        adjusted_labels = torch.clamp(labels, 0, self.num_classes - 1)
 
         loss = self.loss(pred, adjusted_labels)
         loss.backward()
@@ -109,24 +138,48 @@ class RoadSignCNN(nn.Module):
         return accuracy
 
     def save_model(self, model_path):
-        torch.save(self.state_dict(), model_path)
+        # Save additional information about the number of classes
+        checkpoint = {
+            'num_classes': self.num_classes,
+            'model_state_dict': self.state_dict()
+        }
+        torch.save(checkpoint, model_path)
         print(f"Model saved to {model_path}")
+
+    def set_num_classes(self, num_classes):
+        # Dynamically adjust the fully connected layers based on the output size of conv_layers
+        dummy_input = torch.rand(1, 1, 224, 224)
+        conv_output_size = self._get_conv_output_size(dummy_input)
+
+        self.fc_layers[0] = nn.Linear(conv_output_size, 256)
+        self.fc_layers[-1] = nn.Linear(256, num_classes)
+
+        self.num_classes = num_classes  # Update the number of classes
+
+        # Update the loss and optimizer to reflect the new architecture
+        self.loss = nn.CrossEntropyLoss()
+        self.optimizer = optim.Adam(self.parameters(), lr=0.001)
+        self.scheduler = ReduceLROnPlateau(self.optimizer, mode='max', patience=5, verbose=True)
 
     def load_model(self, model_path):
         checkpoint = torch.load(model_path)
 
-        # Adjust the model architecture if needed
-        if 'layers.9.weight' in checkpoint and checkpoint['layers.9.weight'].shape[0] != self.layers[9].weight.shape[0]:
-            # Modify the model architecture to match the checkpoint
-            # Add or remove layers as needed
-            num_classes = checkpoint['layers.9.weight'].shape[0]
-            self.layers[9] = nn.Linear(checkpoint['layers.9.weight'].shape[1], num_classes)
+        # Extract the number of classes from the checkpoint
+        num_classes = checkpoint.get('num_classes', None)
 
-        self.load_state_dict(checkpoint)
+        if num_classes is None:
+            raise ValueError("Unable to determine the number of classes from the checkpoint.")
+
+        # Update the model to reflect the new number of classes
+        self.set_num_classes(num_classes)
+
+        # Load the model state dict
+        self.load_state_dict(checkpoint['model_state_dict'])
         print(f"Model loaded from {model_path}")
 
 # Instantiate the model using the number of classes from the training set
 num_classes = len(torch.unique(labels)) - 1  # Subtract 1 to match the correct number of classes
+dummy_input = torch.rand(1, 1, 224, 224)  # Use a dummy input
 model = RoadSignCNN(num_classes=num_classes)
 model.to(DEVICE)
 
