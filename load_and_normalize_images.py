@@ -62,8 +62,11 @@ def preprocess_and_save_dataset(input_folder, output_file):
 
 # Paths
 input_folder_resize = os.getcwd() + '/CNN_road_sign/road_signs_img'
+# input_folder_resize = os.getcwd() + '/road_signs_img'
 output_folder_resize = os.getcwd() + '/CNN_road_sign/resized_images'
+# output_folder_resize = os.getcwd() + '/resized_images'
 output_file = os.getcwd() + '/CNN_road_sign/road_signs_dataset.pkl'
+# output_file = os.getcwd() + '/road_signs_dataset.pkl'
 target_size = (224, 224)
 
 # Resize Images
@@ -71,3 +74,4 @@ resize_images_in_folder(input_folder_resize, output_folder_resize, target_size)
 
 # Preprocess and Save Dataset
 preprocess_and_save_dataset(output_folder_resize, output_file)
+# print("PS     ", os.getcwd())
