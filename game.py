@@ -7,6 +7,7 @@ from random_image import predict_image
 # Initialize pygame
 pygame.init()
 pwd = os.getcwd()
+score = 0
 
 # Define colors here
 gray = (119, 118, 110)
@@ -28,23 +29,40 @@ pygame.display.update()
 pygame.display.set_caption("CNN Car Game")
 clock = pygame.time.Clock()
 
+# # Load assets
+# # this will load from current working directory
+# car_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\Audi_Skinny_2.png")
+# # background_image = NULL
+# intro_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\intro_background.jpg")
+# paused_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\pause_icon.png")
+# gameplay_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\background_image.jpg")
+# road_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\road_image.jpg")
+# stop_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\stop_sign.jpg")
+# crosswalk_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\crosswalk_sign.png")
+# speedlimit80_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\speedlimit_sign.png")
+# trafficlight_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\traffic_light_sign.png")
+# crossing_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\crossing_image.png")
+
+# trafficlight_green_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_green.png")
+# trafficlight_yellow_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_yellow.png")
+# trafficlight_red_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_red.png")
 # Load assets
 # this will load from current working directory
-car_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\Audi_Skinny_2.png")
+car_image = pygame.image.load(fr"{pwd}\assets\Audi_Skinny_2.png")
 # background_image = NULL
-intro_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\intro_background.jpg")
-paused_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\pause_icon.png")
-gameplay_background_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\background_image.jpg")
-road_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\road_image.jpg")
-stop_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\stop_sign.jpg")
-crosswalk_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\crosswalk_sign.png")
-speedlimit80_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\speedlimit_sign.png")
-trafficlight_sign_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\traffic_light_sign.png")
-crossing_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\crossing_image.png")
+intro_background_image = pygame.image.load(fr"{pwd}\assets\intro_background.jpg")
+paused_background_image = pygame.image.load(fr"{pwd}\assets\pause_icon.png")
+gameplay_background_image = pygame.image.load(fr"{pwd}\assets\background_image.jpg")
+road_image = pygame.image.load(fr"{pwd}\assets\road_image.jpg")
+stop_sign_image = pygame.image.load(fr"{pwd}\assets\stop_sign.jpg")
+crosswalk_image = pygame.image.load(fr"{pwd}\assets\crosswalk_sign.png")
+speedlimit80_sign_image = pygame.image.load(fr"{pwd}\assets\speedlimit_sign.png")
+trafficlight_sign_image = pygame.image.load(fr"{pwd}\assets\traffic_light_sign.png")
+crossing_image = pygame.image.load(fr"{pwd}\assets\crossing_image.png")
 
-trafficlight_green_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_green.png")
-trafficlight_yellow_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_yellow.png")
-trafficlight_red_image = pygame.image.load(fr"{pwd}\CNN_Road_Sign\assets\trafficlight_red.png")
+trafficlight_green_image = pygame.image.load(fr"{pwd}\assets\trafficlight_green.png")
+trafficlight_yellow_image = pygame.image.load(fr"{pwd}\assets\trafficlight_yellow.png")
+trafficlight_red_image = pygame.image.load(fr"{pwd}\assets\trafficlight_red.png")
 
 
 # Initialize pause state
@@ -123,7 +141,15 @@ def unpause():
     global paused
     paused = False
 
-def show_sign(x_sign_start, y_sign_start, sign_type):
+def show_sign(x_sign_start, y_sign_start, sign):
+    # sign_picture = sign
+    font = pygame.font.Font("freesansbold.ttf", 60)
+    prediction = font.render(f"Prediction", True, black)
+
+    gamedisplay.blit(prediction, (x_sign_start, y_sign_start-100))
+    gamedisplay.blit(sign, (x_sign_start, y_sign_start))
+
+def sign_action(x_sign_start, y_sign_start, sign_type):
     if sign_type == 'stop':
         sign_picture = stop_sign_image
     if sign_type == 'crosswalk':
@@ -132,15 +158,20 @@ def show_sign(x_sign_start, y_sign_start, sign_type):
         sign_picture = trafficlight_sign_image
     if sign_type == 'speedlimit80':
         sign_picture = speedlimit80_sign_image
+    
 
     gamedisplay.blit(sign_picture, (x_sign_start, y_sign_start))
 
-def score_system(passed, score):
-    font = pygame.font.SysFont(None, 25)
+def score_system(score):
+    font = pygame.font.SysFont(None, 50)
 
-    score = font.render("Score "+str(score), True, black)
+    # score = font.render("Score: "+str(score), True, black)
 
-    gamedisplay.blit(score, (0, 30))
+    # gamedisplay.blit(score, (0, 50))
+
+    score = font.render(f"Score: {score}", True, black)
+
+    gamedisplay.blit(score, (0, 50))
 
 def gameover_display(text):
     largetext = pygame.font.Font("freesansbold.ttf", 80)
@@ -165,21 +196,24 @@ def car(x, y):
 
 def select_random_file():
     pwd = os.getcwd()
-    sign_folder_list = os.listdir(fr"{pwd}\CNN_Road_Sign\road_signs_img")
-
+    # sign_folder_list = os.listdir(fr"{pwd}\CNN_Road_Sign\road_signs_img")
+    sign_folder_list = os.listdir(fr"{pwd}\road_signs_img")
 
     image_paths = []
     folder_choice = random.choice(['0 TrafficLight', '1 Stop', '2 speedlimit', '3 Crosswalk'])
     for folder in sign_folder_list:
         if folder == folder_choice:
-            # for file in folder:
             # print(fr"{pwd}\road_signs_img\{folder}")
+            print(folder)
 
-            choice = random.choice(os.listdir(fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder}"))
+            # choice = random.choice(os.listdir(fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder}"))
+            choice = random.choice(os.listdir(fr"{pwd}\road_signs_img\{folder}"))
+            print(choice)
             # image_paths.append()
-
-    print(fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder}\{choice}")
-    return fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder}\{choice}"
+    print(choice)
+    print(fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder_choice}\{choice}")
+    # return fr"{pwd}\CNN_Road_Sign\road_signs_img\{folder}\{choice}"
+    return (fr"{pwd}\road_signs_img\{folder_choice}\{choice}", folder_choice)
 
     # return random.choice([image_paths])
 
@@ -213,7 +247,7 @@ def main_menu():
 
 
 def set_scene():
-    font = pygame.font.SysFont(None, 25)
+    font = pygame.font.SysFont(None, 50)
     x = (display_width*0.35)
     y = (display_height*0.95)
 
@@ -223,7 +257,7 @@ def set_scene():
 
     gamedisplay.blit(car_image, (x, y))
 
-    score = font.render("SCORE: 0", True, black)
+    score = font.render(f"Score: {0}", True, black)
 
     gamedisplay.blit(score, (0, 50))
 
@@ -257,18 +291,27 @@ def countdown():
         game_loop()
 
 def game_loop():
-    global paused
+    global paused, score
     x = (display_width*0.35)
     y = (display_height*0.95)
     x_change = 0
     obstacle_speed = 9
     # sign = 'trafficlight'
-    sign = random.choice(['stop', 'crosswalk', 'trafficlight', 'speedlimit80'])
+
+    sign_path, sign_folder_choice = select_random_file()
+    print("SIGN PATH",sign_path)
+    print("FOLDER CHOICE", sign_folder_choice)
+    sign = pygame.image.load(sign_path)
+    sign_prediction = predict_image(sign_path)
+    print("PREDICTION", sign_prediction)
+    print("LABEL", sign_folder_choice)
+    # sign = random.choice(['stop', 'crosswalk', 'trafficlight', 'speedlimit80'])
     y_change = -2
     # obs_startx = 700
     x_sign_start = 560
     y_sign_start = 200
     # obs_starty = 400
+    scored = False
 
     gameover = False
     while not gameover:
@@ -292,8 +335,14 @@ def game_loop():
 
         show_sign(x_sign_start, y_sign_start, sign)
 
+        # Always show score
+        score_system(score)
+
         # Update car
-        if sign == "crosswalk":
+        if sign_prediction == 3:
+            if sign_folder_choice == "3 Crosswalk" and scored == False:
+                score += 1
+                scored = True
             gamedisplay.blit(crossing_image, (275, 400))
             y += y_change
             car(x, y)
@@ -302,12 +351,19 @@ def game_loop():
                 time.sleep(1)
                 y_change = -4
 
-        elif sign == "speedlimit80":
+        elif sign_prediction == 2:
+            if sign_folder_choice == "2 speedlimit" and scored == False:
+                score += 1
+                scored = True
             y_change = -8
             y += y_change
             car(x,y)
 
-        elif sign == "stop":
+        elif sign_prediction == 1:
+            if sign_folder_choice == "1 Stop" and scored == False:
+                score += 1
+                scored = True
+            
             y += y_change
             car(x, y)
             if y == 478:
@@ -315,7 +371,10 @@ def game_loop():
                 time.sleep(2)
                 y_change = -4
 
-        elif sign == "trafficlight":
+        elif sign_prediction == 0:
+            if sign_folder_choice == "0 TrafficLight" and scored == False:
+                score += 1
+                scored = True
             y += y_change
             car(x, y)
 
@@ -341,18 +400,18 @@ def game_loop():
             car(x, y)
 
         if y < 0:
+            scored = False
             game_loop()
 
         button("Pause", 650, 0, 150, 50, blue, bright_blue, "pause")
         pygame.display.update()
         clock.tick(60)
 
-
-predict_image(select_random_file())
-# main_menu()
-# game_loop()
-# pygame.quit()
-# quit()
+# select_random_file()
+main_menu()
+game_loop()
+pygame.quit()
+quit()
 
 
 
