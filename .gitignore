@@ -8,7 +8,7 @@ package-lock.json
 **/*.pyc
 **/*.pyo
 **/*.pyd
-.DS_Store
+**/.DS_Store
 **/*.pth
 **/*.pkl
 
