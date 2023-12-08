@@ -196,7 +196,7 @@ if os.path.exists(model_saved_path):
     model.to(DEVICE)
 else:
     # Train the model if it has not been trained yet
-    EPOCHS = 100
+    EPOCHS = 10
     print("DEVICE IS",DEVICE)
     for epoch in range(EPOCHS):
         total_loss = 0

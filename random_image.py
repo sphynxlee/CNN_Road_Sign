@@ -7,6 +7,8 @@ from road_sign_CNN import RoadSignCNN  # Assuming your model class is defined in
 
 pwd = os.getcwd()
 
+TAG = '=======================random_image ===================='
+
 # Adjust the number of classes accordingly
 model = RoadSignCNN(num_classes=4)
 # model.to('cuda')
@@ -44,7 +46,7 @@ def Road_Sign_Predict(input_image_path):
         model.eval()  # Set the model to evaluation mode
         prediction = model.predict(input_image)
 
-    print("Predicted Class:", prediction.item())
+    print(TAG, "Predicted Class:", prediction.item())
     return prediction.item()
 
 # List all files and find png files from road_signs_img folder
@@ -52,34 +54,33 @@ def random_image():
     sign_folder_list = os.listdir(folder_path)
 
     for folder in sign_folder_list:
-        print(folder)
         folder_path_full = os.path.join(folder_path, folder)
         png_files = [file for file in os.listdir(folder_path_full) if file.lower().endswith(".png")]
-        # print("PNG files:", png_files)
+        # print(TAG, "PNG files:", png_files)
 
         random_file_path = None  # Initialize the variable
 
         if png_files:
             random_file = random.choice(png_files)
             random_file_path = os.path.join(folder_path_full, random_file)
-            print("chosen file:", random_file_path)
+            print(TAG, "chosen file:", random_file_path)
 
             # Perform prediction
             prediction = Road_Sign_Predict(random_file_path)
-            print("predicted sign is: ", prediction)
+            print(TAG, "predicted sign is: ", prediction)
             return prediction
         else:
-            print("No PNG files in folder:", folder)
+            print(TAG, "No PNG files in folder:", folder)
 
     # Handle the case where no PNG files were found
-    print("Unable to make a prediction because no PNG files were found.")
+    print(TAG, "Unable to make a prediction because no PNG files were found.")
     return None
 
 # receive an image path and return the prediction
 def predict_image(image_path):
     # Perform prediction
     prediction = Road_Sign_Predict(image_path)
-    print("predicted sign is: ", prediction)
+    print(TAG, "predicted sign is: ", prediction)
     return prediction
 
-random_image()
+# random_image()
