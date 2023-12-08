@@ -208,8 +208,8 @@ else:
             total_loss += loss
         print("EPOCH:", epoch + 1, ": ", total_loss)
 
+        # model.evaluate(eval_loader)
     # Save the trained model
     model.save_model(model_saved_path)
 
     # Evaluate the model on the evaluation set
-    model.evaluate(eval_loader)

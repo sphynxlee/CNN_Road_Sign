@@ -43,7 +43,7 @@ def Road_Sign_Predict(input_image_path):
 
     # Perform prediction
     with torch.no_grad():
-        model.eval()  # Set the model to evaluation mode
+        # model.eval()  # Set the model to evaluation mode
         prediction = model.predict(input_image)
 
     print(TAG, "Predicted Class:", prediction.item())
@@ -82,5 +82,9 @@ def predict_image(image_path):
     prediction = Road_Sign_Predict(image_path)
     print(TAG, "predicted sign is: ", prediction)
     return prediction
+
+# for i in range(20):
+predict_image(fr"C:\Users\Avina\OneDrive - Nova Scotia Community College\NSCC_ProgrammingForAI\GroupAssignment\gitmainfolder\CNN_Road_Sign\road_signs_img\2 speedlimit\40_01.png")
+predict_image(fr"C:\Users\Avina\OneDrive - Nova Scotia Community College\NSCC_ProgrammingForAI\GroupAssignment\gitmainfolder\CNN_Road_Sign\road_signs_img\0 TrafficLight\road3_trafficlight.png")
 
 # random_image()
