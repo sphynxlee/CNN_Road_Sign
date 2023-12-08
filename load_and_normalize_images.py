@@ -60,13 +60,12 @@ def preprocess_and_save_dataset(input_folder, output_file):
     with open(output_file, 'wb') as file:
         pickle.dump(dataset, file)
 
+pwd = os.getcwd()
+
 # Paths
-input_folder_resize = os.getcwd() + '/CNN_road_sign/road_signs_img'
-# input_folder_resize = os.getcwd() + '/road_signs_img'
-output_folder_resize = os.getcwd() + '/CNN_road_sign/resized_images'
-# output_folder_resize = os.getcwd() + '/resized_images'
-output_file = os.getcwd() + '/CNN_road_sign/road_signs_dataset.pkl'
-# output_file = os.getcwd() + '/road_signs_dataset.pkl'
+input_folder_resize = fr'{pwd}\CNN_road_sign\road_signs_img'
+output_folder_resize = fr'{pwd}\CNN_road_sign\resized_images'
+output_file = fr'{pwd}\CNN_road_sign\road_signs_dataset.pkl'
 target_size = (224, 224)
 
 # Resize Images
