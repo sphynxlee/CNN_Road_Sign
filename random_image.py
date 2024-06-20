@@ -11,6 +11,7 @@ TAG = '=======================random_image ===================='
 
 # Adjust the number of classes accordingly
 model = RoadSignCNN(num_classes=4)
+torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
 # model.to('cuda')
 
 # Load the trained model
