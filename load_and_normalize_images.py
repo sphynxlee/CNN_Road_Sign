@@ -62,10 +62,16 @@ def preprocess_and_save_dataset(input_folder, output_file):
 
 pwd = os.getcwd()
 
-# Paths
-input_folder_resize = fr'{pwd}\CNN_road_sign\road_signs_img'
-output_folder_resize = fr'{pwd}\CNN_road_sign\resized_images'
-output_file = fr'{pwd}\CNN_road_sign\road_signs_dataset.pkl'
+# Paths for windows platform
+# input_folder_resize = fr'{pwd}\CNN_road_sign\road_signs_img'
+# output_folder_resize = fr'{pwd}\CNN_road_sign\resized_images'
+# output_file = fr'{pwd}\CNN_road_sign\road_signs_dataset.pkl'
+# input_folder_resize = os.path.join(pwd, '/road_signs_img'.lstrip('/'))
+
+input_folder_resize = os.path.join(pwd, 'road_signs_img')
+output_folder_resize = os.path.join(pwd, 'resized_images')
+output_file = os.path.join(pwd, 'road_signs_dataset.pkl')
+
 target_size = (224, 224)
 
 # Resize Images

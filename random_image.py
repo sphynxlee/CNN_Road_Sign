@@ -14,13 +14,15 @@ model = RoadSignCNN(num_classes=4)
 # model.to('cuda')
 
 # Load the trained model
-model_path = pwd + "/CNN_road_sign/road_sign_model.pth"
-# model_path = pwd + "/road_sign_model.pth"
+# windows platform:
+# model_path = pwd + "/CNN_road_sign/road_sign_model.pth"
+model_path = os.path.join(pwd, 'road_sign_model.pth')
 # model.load_model(model_path)
 # model.to("cuda")
 
-folder_path = pwd + "/CNN_road_sign/road_signs_img/"
-# folder_path = pwd + "/road_signs_img/"
+# windows platform:
+# folder_path = pwd + "/CNN_road_sign/road_signs_img/"
+folder_path = os.path.join(pwd, 'road_signs_img')
 
 # Prepare input data
 # For example, load an image using PIL and convert it to the required format
@@ -83,8 +85,9 @@ def predict_image(image_path):
     print(TAG, "predicted sign is: ", prediction)
     return prediction
 
-# for i in range(20):
-predict_image(fr"C:\Users\Avina\OneDrive - Nova Scotia Community College\NSCC_ProgrammingForAI\GroupAssignment\gitmainfolder\CNN_Road_Sign\road_signs_img\2 speedlimit\40_01.png")
-predict_image(fr"C:\Users\Avina\OneDrive - Nova Scotia Community College\NSCC_ProgrammingForAI\GroupAssignment\gitmainfolder\CNN_Road_Sign\road_signs_img\0 TrafficLight\road3_trafficlight.png")
+# windows platform:
+# # for i in range(20):
+# predict_image(fr"C:\Users\Avina\OneDrive - Nova Scotia Community College\NSCC_ProgrammingForAI\GroupAssignment\gitmainfolder\CNN_Road_Sign\road_signs_img\2 speedlimit\40_01.png")
+# predict_image(fr"C:\Users\Avina\OneDrive - Nova Scotia Community College\NSCC_ProgrammingForAI\GroupAssignment\gitmainfolder\CNN_Road_Sign\road_signs_img\0 TrafficLight\road3_trafficlight.png")
 
-# random_image()
+random_image()
