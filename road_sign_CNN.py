@@ -10,8 +10,12 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
-DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-# DEVICE = torch.device('cpu')
+# windows nvda platform
+# DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# # DEVICE = torch.device('cpu')
+
+DEVICE = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
+
 BATCH_SIZE = 32
 pwd = os.getcwd()
 
@@ -199,7 +203,7 @@ if os.path.exists(model_saved_path):
     model.to(DEVICE)
 else:
     # Train the model if it has not been trained yet
-    EPOCHS = 10
+    EPOCHS = 100
     print("DEVICE IS",DEVICE)
     for epoch in range(EPOCHS):
         total_loss = 0
